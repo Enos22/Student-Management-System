@@ -1,4 +1,23 @@
-from utils.storage import load_json, save_json
+import json
+from pathlib import Path
+
+
+def load_json(file_path):
+    path = Path(file_path)
+    if not path.exists():
+        return []
+    try:
+        with path.open("r", encoding="utf-8") as file:
+            return json.load(file)
+    except (json.JSONDecodeError, OSError):
+        return []
+
+
+def save_json(file_path, data):
+    path = Path(file_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as file:
+        json.dump(data, file, indent=4)
 
 TEACHERS_FILE= "data/teacher(admin).json"
 STUDENTS_FILE = "data/students.json"
@@ -10,11 +29,11 @@ class SchoolAdmin:
         self.email = email
 
     def add_teacher(self, teacher_data):
-        teacher= load_json(TEACHERS_FILE)
-        teacher.append(teacher_data)
-        save_json(TEACHERS_FILE, teacher)
+        teachers = load_json(TEACHERS_FILE)
+        teachers.append(teacher_data)
+        save_json(TEACHERS_FILE, teachers)
         return teacher_data
-
+    
     def delete_teacher(self, teacher_id):
         teachers = load_json(TEACHERS_FILE)
         for t in teachers:
@@ -39,7 +58,7 @@ class SchoolAdmin:
                 return True
         return False
 
-        def add_course(self, course_data):
+    def add_course(self, course_data):
             courses = load_json(COURSES_FILE)
             courses.append(course_data)
             save_json(COURSES_FILE, courses)
