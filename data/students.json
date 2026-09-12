@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "name": "Jane Wanjiru",
+        "course": "Software Engineering",
+        "grade": "B",
+        "units": {
+            "Mathematics": 90,
+            "English": 85
+        }
+    },
+    {
+        "id": 2,
+        "name": "Kaitlyn Njeri",
+        "course": "Software Engineering",
+        "grade": "A-",
+        "units": {
+            "Mathematics": 78,
+            "Communication Skills": 92
+        }
+    }
+]
