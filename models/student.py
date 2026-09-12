@@ -48,12 +48,12 @@ class StudentDetails:
             return []
 
     def view_student(self, name):
-        for student in self.students:
-            if student.name.lower() == name.lower():
-                return student
-            return None
+        for s in self.students:
+            if s.name.lower() == name.lower():
+                return s
+        return None
         
-    def view_classmates(self, student):
+    def view_classmates(self, current_student):
 
-        return [ student.name for student in self.students if student.course.lower() == student.course.lower() and student.name.lower()!= student.name.lower()]
+        return [ s.name for s in self.students if s.course.lower() == current_student.course.lower() and s.name.lower() != current_student.name.lower()]
   
