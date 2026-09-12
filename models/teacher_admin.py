@@ -35,7 +35,7 @@ class TeacherAdmin:
 
         if folder:
             os.makedirs(folder, exist_ok=True)
-            
+
         with open(self.filename, "w") as file:
              json.dump(self.students, file, indent=4)
 
@@ -88,26 +88,23 @@ class TeacherAdmin:
         return "Student deleted successfully"
 
 
-    def add_unit(self, unit_code, unit_name, description, credit_hours=3):
-        """Add a unit to the available unit list."""
-        self.units[unit_code] = {
-            "unit_name": unit_name,
-            "description": description,
-            "credit_hours": credit_hours
-        }
+    def add_unit(self, student_id, unit_name, score):
+        student = self.find_student(student_id)
 
-        TeacherAdmin.log_actions.append(f"Added unit {unit_code}")
+        if not student:
+           return "Student not found"
+
+        student.setdefault("units", {})
+        student["units"][unit_name] = score
+
         self.save_data()
-
         return "Unit added successfully"
 
     def delete_unit(self, unit_code):
         """Delete a unit and remove its scores from students."""
         if unit_code not in self.units:
             return "Unit not found"
-
         del self.units[unit_code]
-
         for student in self.students:
             student.setdefault("units", {})
             student.setdefault("grades", {})
