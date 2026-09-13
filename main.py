@@ -33,14 +33,7 @@ class AdminCLI:
             course = input("Course: ").strip()
             grade = input("Grade: ").strip()
 
-            print(
-                self.admin.add_student(
-                    student_id,
-                    name,
-                    course,
-                    grade
-                )
-            )
+            print(self.admin.add_student( student_id,name,course,grade))
 
         elif choice == "3":
             student_id = input("Student ID: ").strip()
