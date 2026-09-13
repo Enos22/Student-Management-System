@@ -45,4 +45,42 @@ class SchoolAdminTests(unittest.TestCase):
 
     def test_delete_missing_teacher_returns_false(self):
         result = self.admin.delete_teacher(999)
+        self.assertFalse(result)  
+
+    def test_add_student_saves_student(self):
+        student = {"id": 1, "name": "Jane Wanjiru", "course": "Software Engineering", "grade": "B", "units": {"Mathematics": 90}}
+        self.admin.add_student(student)
+        students = school_admin_module.load_json(school_admin_module.STUDENTS_FILE)
+        self.assertEqual(len(students), 1)
+        self.assertEqual(students[0]["name"], "Jane Wanjiru")
+
+    def test_delete_student_removes_student(self):
+        student = {"id": 1, "name": "Jane Wanjiru", "course": "Software Engineering", "grade": "B", "units": {}}
+        self.admin.add_student(student)
+        deleted = self.admin.delete_student(1)
+        self.assertTrue(deleted)
+        students = school_admin_module.load_json(school_admin_module.STUDENTS_FILE)
+        self.assertEqual(students, [])
+
+    def test_delete_missing_student_returns_false(self):
+        result = self.admin.delete_student(999)
         self.assertFalse(result)
+
+    def test_add_course_saves_course(self):
+        course = {"id": 1, "title": "Data Structures"}
+        self.admin.add_course(course)
+        courses = school_admin_module.load_json(school_admin_module.COURSES_FILE)
+        self.assertEqual(len(courses), 1)
+        self.assertEqual(courses[0]["title"], "Data Structures")
+
+    def test_delete_course_removes_course(self):
+        course = {"id": 1, "title": "Data Structures"}
+        self.admin.add_course(course)
+        deleted = self.admin.delete_course(1)
+        self.assertTrue(deleted)
+        courses = school_admin_module.load_json(school_admin_module.COURSES_FILE)
+        self.assertEqual(courses, [])
+
+    def test_delete_missing_course_returns_false(self):
+        result = self.admin.delete_course(999)
+        self.assertFalse(result)    
