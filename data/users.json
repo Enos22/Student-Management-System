@@ -1,0 +1,38 @@
+[
+    {
+        "name": "enos arenga",
+        "email": "enos@gmail.com",
+        "password_hash": "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
+        "role": "Student"
+    },
+    {
+        "name": "arenga",
+        "email": "arenga@aol.com",
+        "password_hash": "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
+        "role": "Teacher_Admin"
+    },
+    {
+        "name": "enos k",
+        "email": "k@aol.com",
+        "password_hash": "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
+        "role": "Student"
+    },
+    {
+        "name": "soma",
+        "email": "soma@gmail.com",
+        "password_hash": "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
+        "role": "Student"
+    },
+    {
+        "name": "soma",
+        "email": "soma@aol.com",
+        "password_hash": "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
+        "role": "School_Admin"
+    },
+    {
+        "name": "jane",
+        "email": "jane@gmail.com",
+        "password_hash": "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
+        "role": "Student"
+    }
+]
