@@ -51,23 +51,17 @@ class TeacherAdmin:
         """Add a new student."""
         if self.find_student(student_id):
             return "A student with that ID already exists"
-
         if units is None:
             units = {}
-
         student = {
             "id": student_id,
             "name": name,
             "course": course,
             "grade": grade,
-            "units": units,
-            
-        }
-
+            "units": units, }
         self.students.append(student)
         TeacherAdmin.log_actions.append(f"Added student {student_id}")
         self.save_data()
-
         return "Student added successfully"
 
     def delete_student(self, student_id):

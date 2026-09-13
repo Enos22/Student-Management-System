@@ -1,0 +1,12 @@
+[
+    {
+        "id": "123",
+        "name": "Benson",
+        "course": "CS",
+        "grade": "56",
+        "units": {
+            "Dom": 67,
+            "Networking": 89
+        }
+    }
+]
