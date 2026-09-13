@@ -3,7 +3,7 @@ from models.teacher_admin import TeacherAdmin
 # Automatically reset the terminal color after each print
 init(autoreset=True)
 
-class AdminCLI:
+class TEACHERCLI:
     def __init__(self):
         # Create the TeacherAdmin object that handles the actual operations
         self.admin = TeacherAdmin()
@@ -101,11 +101,14 @@ class AdminCLI:
             pass
 # Start the application only when this file is run directly
 if __name__ == "__main__":
-    app = AdminCLI()
-    app.run()
+    app = TEACHERCLI()
+    app.run()  
     print(Fore.YELLOW + "\nApplication closed.")
-from models.school_admin import SchoolAdmin
 
+
+# Md Njeri ===================================================================================
+
+from models.school_admin import SchoolAdmin
 
 def is_valid_email(email):
     return "@" in email and "." in email.split("@")[-1]
@@ -219,6 +222,9 @@ while True:
 
     else:
         print("Invalid option, try again.")
+
+
+# Mr Enos ============================================================
 from models.student import StudentDetails
 from utils.auth import AuthManager
 
