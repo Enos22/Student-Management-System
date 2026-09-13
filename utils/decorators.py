@@ -19,7 +19,8 @@ def admin_required(function):
             print("Please login first.")
             return None
 
-        if self.current_user.role != "admin":
+        role = getattr(self.current_user, "role", "")
+        if role not in {"admin", "Teacher_Admin", "School_Admin"}:
             print("Admin access required.")
             return None
 

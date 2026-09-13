@@ -1,28 +1,47 @@
-from functools import wraps
+import unittest
+
+from models.users_login import School_Admin, Teacher_Admin, User
+from utils.decorators import admin_required, login_required
 
 
-def login_required(function):
-    @wraps(function)
-    def wrapper(self, *args, **kwargs):
-        if self.current_user is None:
-            print("Please login first.")
-            return None
-        return function(self, *args, **kwargs)
+class FakeApp:
+    def __init__(self, current_user=None):
+        self.current_user = current_user
 
-    return wrapper
+    @login_required
+    def user_action(self):
+        return "user action"
+
+    @admin_required
+    def admin_action(self):
+        return "admin action"
 
 
-def admin_required(function):
-    @wraps(function)
-    def wrapper(self, *args, **kwargs):
-        if self.current_user is None:
-            print("Please login first.")
-            return None
+class DecoratorTests(unittest.TestCase):
+    def test_login_required_blocks_guest(self):
+        app = FakeApp()
+        self.assertIsNone(app.user_action())
 
-        if self.current_user.role != "admin":
-            print("Admin access required.")
-            return None
+    def test_login_required_allows_logged_in_user(self):
+        user = User("Jane", "jane@example.com", User.hash_password("pass"))
+        app = FakeApp(user)
+        self.assertEqual(app.user_action(), "user action")
 
-        return function(self, *args, **kwargs)
+    def test_admin_required_blocks_normal_user(self):
+        user = User("Jane", "jane@example.com", User.hash_password("pass"))
+        app = FakeApp(user)
+        self.assertIsNone(app.admin_action())
 
-    return wrapper
+    def test_admin_required_allows_teacher_admin(self):
+        teacher_admin = Teacher_Admin("Admin", "admin@example.com", User.hash_password("pass"))
+        app = FakeApp(teacher_admin)
+        self.assertEqual(app.admin_action(), "admin action")
+
+    def test_admin_required_allows_school_admin(self):
+        school_admin = School_Admin("Admin", "admin@example.com", User.hash_password("pass"))
+        app = FakeApp(school_admin)
+        self.assertEqual(app.admin_action(), "admin action")
+
+
+if __name__ == "__main__":
+    unittest.main()
