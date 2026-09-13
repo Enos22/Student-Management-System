@@ -9,7 +9,8 @@ from pathlib import Path
 from utils.storage import load_json, save_json
 
 class Student:  #read student details posted by admins!
-    def __init__(self, name, course, grade, units):
+    def __init__(self,id, name, course, grade, units):
+        self.id = id
         self.name = name
         self.course = course
         self.grade = grade
@@ -20,6 +21,7 @@ class Student:  #read student details posted by admins!
 
     def from_dict(cls, data):
         return cls(
+        data["id"],
         data["name"],
         data["course"],
         data["grade"],
