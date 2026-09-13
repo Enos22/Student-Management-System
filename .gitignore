@@ -1,0 +1,7 @@
+___pycache__/
+*.pyc
+*.pyo
+data/teacher(admin).json
+data/students.json
+data/*.json
+data /*.pyc
