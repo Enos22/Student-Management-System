@@ -1,10 +1,10 @@
 from utils.storage import load_json, save_json
-
+import json
 
 TEACHERS_FILE = "data/teacher(admin).json"
 STUDENTS_FILE = "data/students.json"
 COURSES_FILE = "data/courses.json"
-
+REGISTER_FILE="data/users.json"
 
 class SchoolAdmin:
     def __init__(self, name, email):
@@ -40,6 +40,27 @@ class SchoolAdmin:
                 save_json(STUDENTS_FILE, students)
                 return True
         return False
+    def register_student(self,name,email,password_hash,role):
+        student={
+          "name": name,
+          "email": email,
+          "password_hash": password_hash,
+          "role": role
+        }
+         # Load existing users from file (or start with empty list)
+        try:
+            with open(REGISTER_FILE, "r") as f:
+                users = json.load(f)
+        except FileNotFoundError:
+            users = []
+        # Add the new student
+        users.append(student)
+        # Save back to the file
+        with open(REGISTER_FILE, "w") as f:
+            json.dump(users, f, indent=4)
+
+        return student
+         
 
     def add_course(self, course_data):
         courses = load_json(COURSES_FILE)
