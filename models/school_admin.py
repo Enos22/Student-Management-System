@@ -1,30 +1,32 @@
+ ## import functions
 from utils.storage import load_json, save_json
 
-
+## fixed path strings written in caps to show this should not change
 TEACHERS_FILE = "data/teacher(admin).json"
 STUDENTS_FILE = "data/students.json"
 COURSES_FILE = "data/courses.json"
 
 
+## create blueprint (encapsulation)
 class SchoolAdmin:
     def __init__(self, name, email):
         self.name = name
         self.email = email
+   ## create methods
+    def add_teacher(self, teacher_data): ## takes whole dictionary
+        teachers = load_json(TEACHERS_FILE) ## calls imported function
+        teachers.append(teacher_data) ## adds teacher
+        save_json(TEACHERS_FILE, teachers) ## writes updated list into the file
+        return teacher_data ## returns what was added
 
-    def add_teacher(self, teacher_data):
+    def delete_teacher(self, teacher_id): ## takes only id
         teachers = load_json(TEACHERS_FILE)
-        teachers.append(teacher_data)
-        save_json(TEACHERS_FILE, teachers)
-        return teacher_data
-
-    def delete_teacher(self, teacher_id):
-        teachers = load_json(TEACHERS_FILE)
-        for t in teachers:
+        for t in teachers:  ## loops thru every teacher one at a time
             if t.get('id') == teacher_id:
-                teachers.remove(t)
+                teachers.remove(t) ## removes it
                 save_json(TEACHERS_FILE, teachers)
                 return True
-        return False
+        return False ## if not found
 
     def add_student(self, student_data):
         students = load_json(STUDENTS_FILE)
@@ -40,6 +42,7 @@ class SchoolAdmin:
                 save_json(STUDENTS_FILE, students)
                 return True
         return False
+
 
     def add_course(self, course_data):
         courses = load_json(COURSES_FILE)
