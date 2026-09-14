@@ -4,7 +4,6 @@ from models.school_admin import SchoolAdmin
 from models.student import StudentDetails
 from models.teacher_admin import TeacherAdmin
 from utils.storage import load_json
-
 init(autoreset=True)
 
 
@@ -224,7 +223,8 @@ class SchoolCLI:
             print("4. Delete Student")
             print("5. Add Course")
             print("6. Delete Course")
-            print("7. Exit")
+            print("7. Register student")
+            print("8. Exit")
 
             choice = input("Choose an option: ")
 
@@ -283,7 +283,25 @@ class SchoolCLI:
                 course_id = self.read_id("Course ID to delete: ")
                 deleted = self.school_admin.delete_course(course_id)
                 print("Deleted." if deleted else "No course found with that ID.")
+            
             elif choice == "7":
+                    print("\n--- Register New Student ---")
+                    name = input("Enter student name: ").strip()
+                    email = input("Enter student email: ").strip()
+                    password = input("Enter student password: ").strip()
+                    role = input("Enter role (student/admin): ").strip()
+
+                    # Hash the password (basic example, you can use hashlib or bcrypt)
+                    import hashlib
+                    password_hash = hashlib.sha256(password.encode()).hexdigest()
+
+                    # Call your method
+                    student = self.school_admin.register_student(name, email, password_hash, role)
+
+                    print(f"Student {student['name']} registered successfully!") 
+               
+
+            elif choice == "8":
                 print("Goodbye!")
                 self.current_user = None
                 break
