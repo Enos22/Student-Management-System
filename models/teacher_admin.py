@@ -68,35 +68,57 @@ class TeacherAdmin:
         return None
 
     def add_student(self, student_id, name, course, grade, units=None):
-        if self.find_student(student_id):
-            return "A student with that ID already exists"
+        # Teacher should not create user accounts — they can only add/update details
+        target_id = str(student_id).strip()
+        target_name = str(name).strip()
 
-        registered = False
+        if not target_id and not target_name:
+            return "Provide student ID or name"
+
+        # Try to find existing stored student to update
+        for s in self.students:
+            s_id = str(s.get("id", "")).strip()
+            s_name = str(s.get("name", "")).strip().lower()
+            s_email = str(s.get("email", "")).strip().lower()
+            if (target_id and s_id == target_id) or (target_name and s_name == target_name.lower()) or (target_name and s_email == target_name.lower()):
+                # update available fields
+                if name:
+                    s["name"] = name
+                if course:
+                    s["course"] = course
+                if grade:
+                    s["grade"] = grade
+                if units is not None:
+                    s["units"] = units
+                TeacherAdmin.log_actions.append(f"Updated student {s.get('id')}")
+                self.save_data()
+                return "Student details updated successfully"
+
+        # Not found in stored students; ensure the user is registered by school admin
+        registered_user = None
         for user in self._registered_students():
             user_id = str(user.get("id", "")).strip()
             user_name = str(user.get("name", "")).strip().lower()
             user_email = str(user.get("email", "")).strip().lower()
-            search_name = str(name).strip().lower()
-            search_email = str(name).strip().lower()
-            if (user_id and str(student_id).strip() == user_id) or (search_name and user_name == search_name) or (search_email and user_email == search_email):
-                registered = True
+            if (target_id and user_id == target_id) or (target_name and (user_name == target_name.lower() or user_email == target_name.lower())):
+                registered_user = user
                 break
 
-        if not registered:
+        if not registered_user:
             return "Student must be registered by the school admin first."
 
-        if units is None:
-            units = {}
-
+        # create student details record using registered user's canonical data
+        final_id = registered_user.get("id") if registered_user.get("id") is not None else (int(target_id) if target_id.isdigit() else target_id)
         student = {
-            "id": student_id,
-            "name": name,
+            "id": int(final_id) if str(final_id).isdigit() else final_id,
+            "name": registered_user.get("name") or target_name,
+            "email": registered_user.get("email", ""),
             "course": course,
             "grade": grade,
-            "units": units,
+            "units": units or {},
         }
         self.students.append(student)
-        TeacherAdmin.log_actions.append(f"Added student {student_id}")
+        TeacherAdmin.log_actions.append(f"Added student {student.get('id')}")
         self.save_data()
         return "Student added successfully"
 
