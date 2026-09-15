@@ -182,9 +182,11 @@ Testing approach
 
     unittest
 
+
 and:
 
     unittest.mock
+
 
     patch() is used to simulate keyboard input, while redirect_stdout() captures what the CLI prints so the test can check the output.
 It can also be run directly with:
