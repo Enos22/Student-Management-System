@@ -161,7 +161,8 @@ Since the file contains:
         unittest.main()
 
 it can also be run directly with:
-    "python tests/test_auth.py"
+    "python3 -m unittest tests/test_auth.py
+"
 
 # tests/test_cli.py
     This file tests the project's command-line interface (CLI). Instead of manually typing choices into the terminal, it uses mocked input to simulate what a real user would enter.
@@ -186,7 +187,8 @@ and:
 
     patch() is used to simulate keyboard input, while redirect_stdout() captures what the CLI prints so the test can check the output.
 It can also be run directly with:
-        "python tests/test_cli.py"
+        "python3 -m unittest tests/test_cli.py
+"
 
 # tests/test_decorator.py
 This file tests the access-control decorators used in the project:
@@ -203,7 +205,8 @@ What this tells us about the project
  The application has a basic role-based access control system. Different parts of the application can be protected depending on whether someone is logged in and what role they have.
 
 The test can also be run directly with:
-     "python tests/test_decorator.py"
+     "python3 -m unittest tests/test_decorators.py
+"
 
 
 # tests/test_school_admin.py
@@ -240,7 +243,8 @@ This is good because your actual project data isn't changed when the tests run.
 The test also temporarily redirects the SchoolAdmin class to those test files.
 README testing command
  
-    python tests/test_school_admin.py
+    "python3 -m unittest tests/test_school_admin.py"
+
 
 # tests/test_student.py
  This file tests the student information and classmate functionality provided by Student and StudentDetails.
@@ -268,7 +272,7 @@ The test uses:
    Once the test finishes, the temporary file is deleted. This keeps the test environment clean and prevents the real students.json from being changed.
 Direct command
    This file can be run directly with:
- "python tests/test_student.py"
+   "python3 -m unittest tests/test_student.py"
 
 # test_teacher_admin.py
     This file checks the main functionality of the Teacher Admin class.
@@ -295,7 +299,7 @@ How to run it
 
 Because this is a standalone Python script, it can be run with:
 
-"python -m tests/test_teacher_admin.py"
+"python3 -m tests.test_teacher_admin"
 
 If everything works without an exception, it prints:
 
