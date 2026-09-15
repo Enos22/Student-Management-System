@@ -13,7 +13,9 @@ class User:
         return hashlib.sha256(password.encode()).hexdigest()
 
     def check_password(self, password):
-        return self._password_hash == self.hash_password(password)
+        stored_value = str(self._password_hash or "").strip()
+        candidate = str(password or "").strip()
+        return stored_value == candidate or stored_value == self.hash_password(candidate)
 
     @property
     def password_hash(self):
