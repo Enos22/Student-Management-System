@@ -182,8 +182,11 @@ Testing approach
 
     unittest
 
+
 and:
+
     unittest.mock
+
 
     patch() is used to simulate keyboard input, while redirect_stdout() captures what the CLI prints so the test can check the output.
 It can also be run directly with:
@@ -207,7 +210,6 @@ What this tells us about the project
 The test can also be run directly with:
      "python3 -m unittest tests/test_decorators.py
 "
-
 
 # tests/test_school_admin.py
 This is one of the larger test files. It tests the main functionality of the School Admin side of the system.
