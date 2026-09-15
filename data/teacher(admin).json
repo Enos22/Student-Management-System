@@ -1,14 +1,22 @@
 [
     {
-        "id": 3,
-        "name": "ryan mbugua",
-        "email": "ryan@gmail.com",
-        "subject": "Mathematics"
+        "id": 100,
+        "name": "teacher 4",
+        "email": "t@gmail.com",
+        "subject": "cre",
+        "password_hash": "cde383eee8ee7a4400adf7a15f716f179a2eb97646b37e089eb8d6d04e663416"
     },
     {
-        "id": 5,
-        "name": "kaitlyn",
-        "email": "kaitlyn@gmail.com",
-        "subject": "Communication Skills"
+        "id": 101,
+        "name": "teacher one",
+        "email": "teacher1@school.com",
+        "subject": "Math",
+        "password_hash": "cde383eee8ee7a4400adf7a15f716f179a2eb97646b37e089eb8d6d04e663416"
+    },
+    {
+        "id": 200,
+        "name": "benson",
+        "email": "ben@aol.com",
+        "subject": "CRE"
     }
 ]
