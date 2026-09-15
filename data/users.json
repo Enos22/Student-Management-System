@@ -40,5 +40,11 @@
         "email": "kaitlyn@gmail.com",
         "password_hash": "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
         "role": "Student"
+    },
+    {
+        "name": "Real Student",
+        "email": "realstudent@school.com",
+        "password_hash": "9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c",
+        "role": "Student"
     }
 ]

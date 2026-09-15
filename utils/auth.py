@@ -21,7 +21,7 @@ class AuthManager:
         self.users_file = Path(users_file)
         # stores the file path where all registered users are saved
 
-    def register(self, name, email, password, role="user"):
+    def register(self, name, email, password, role="user", student_id=None):
         # creates a brand new user account
 
         name = str(name).strip()
@@ -55,6 +55,11 @@ class AuthManager:
         # {...} here is a set of allowed roles
         # if the role isn't one of these 5, reject it
 
+        if role == "student" and (student_id is None or str(student_id).strip() == ""):
+            raise ValueError("Student ID is required for student registration.")
+        # NEW: students must provide a student_id (given to them by their teacher)
+        # so we can later link their account to their actual student record
+
         users = load_json(self.users_file)
         # loads the list of everyone already registered
 
@@ -79,7 +84,7 @@ class AuthManager:
         else:
             user = User(name, email, password_hash, role="user")
         # builds the correct type of user object depending on their chosen role
-
+        
         users.append(user.to_dict())
         # to_dict() turns the user object into a plain dictionary, ready for JSON
         # adds it onto the end of the existing users list
