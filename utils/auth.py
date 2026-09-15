@@ -66,6 +66,11 @@ class AuthManager:
                 user = School_Admin(saved_user["name"], saved_user["email"], saved_user["password_hash"])
             elif normalized.lower() == "student":
                 user = User(saved_user["name"], saved_user["email"], saved_user["password_hash"], role="Student")
+                # attach persistent id for students so portals can lookup by id
+                try:
+                    user.id = saved_user.get("id")
+                except Exception:
+                    pass
             else:
                 user = User(saved_user["name"], saved_user["email"], saved_user["password_hash"], role=normalized or "user")
 
