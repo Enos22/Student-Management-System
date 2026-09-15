@@ -7,8 +7,9 @@ from utils.validators import not_empty, valid_email
 
 
 class AuthManager:
-    def __init__(self, users_file="data/users.json"):
+    def __init__(self, users_file="data/users.json", teachers_file="data/teacher(admin).json"):
         self.users_file = Path(users_file)
+        self.teachers_file = Path(teachers_file)
 
     def register(self, name, email, password, role="user"):
         name = str(name).strip()
@@ -21,8 +22,10 @@ class AuthManager:
             raise ValueError("Please enter a valid email.")
         if len(password) < 4:
             raise ValueError("Password must have at least 4 characters.")
-        if role not in {"student", "teacher_admin", "school_admin", "user", "admin"}:
-            raise ValueError("Role must be student, teacher_admin, school_admin, user, or admin.")
+
+        allowed_roles = {"teacher_admin", "school_admin", "user", "admin"}
+        if role not in allowed_roles:
+            raise ValueError("Only teacher_admin, school_admin, user, and admin roles can be registered here.")
 
         users = load_json(self.users_file)
         for saved_user in users:
@@ -37,8 +40,6 @@ class AuthManager:
             user = Teacher_Admin(name, email, password_hash)
         elif role == "school_admin":
             user = School_Admin(name, email, password_hash)
-        elif role == "student":
-            user = User(name, email, password_hash, role="Student")
         else:
             user = User(name, email, password_hash, role="user")
 
@@ -55,17 +56,40 @@ class AuthManager:
                 continue
 
             role_name = str(saved_user.get("role", "user"))
-            if role_name == "admin":
+            normalized = role_name.strip()
+
+            if normalized.lower() == "admin":
                 user = Admin(saved_user["name"], saved_user["email"], saved_user["password_hash"], role="admin")
-            elif role_name == "Teacher_Admin":
+            elif normalized.lower() == "teacher_admin":
                 user = Teacher_Admin(saved_user["name"], saved_user["email"], saved_user["password_hash"])
-            elif role_name == "School_Admin":
+            elif normalized.lower() == "school_admin":
                 user = School_Admin(saved_user["name"], saved_user["email"], saved_user["password_hash"])
-            elif role_name == "Student":
+            elif normalized.lower() == "student":
                 user = User(saved_user["name"], saved_user["email"], saved_user["password_hash"], role="Student")
             else:
-                user = User(saved_user["name"], saved_user["email"], saved_user["password_hash"], role=role_name or "user")
+                user = User(saved_user["name"], saved_user["email"], saved_user["password_hash"], role=normalized or "user")
 
+            if user.check_password(password):
+                return user
+            return None
+
+        teachers = load_json(self.teachers_file)
+        for saved_teacher in teachers:
+            if str(saved_teacher.get("email", "")).lower() != email:
+                continue
+
+            teacher_hash = saved_teacher.get("password_hash")
+            if teacher_hash is None and saved_teacher.get("password"):
+                teacher_hash = User.hash_password(str(saved_teacher["password"]))
+
+            if teacher_hash is None:
+                return None
+
+            user = Teacher_Admin(
+                str(saved_teacher.get("name", "Teacher")),
+                str(saved_teacher.get("email", email)),
+                str(teacher_hash),
+            )
             if user.check_password(password):
                 return user
             return None
