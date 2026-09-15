@@ -102,7 +102,13 @@ class SchoolCLI:
             self.current_user = None
 
     def student_portal(self):
-        current_student = self.student_store.view_student(self.current_user.email) or self.student_store.view_student(self.current_user.name)
+        # allow lookup by registered id first, then email, then name
+        current_student = None
+        user_id = getattr(self.current_user, "id", None)
+        if user_id is not None:
+            current_student = self.student_store.view_student(user_id)
+        if current_student is None:
+            current_student = self.student_store.view_student(self.current_user.email) or self.student_store.view_student(self.current_user.name)
         if current_student is None:
             print(f"Dear '{self.current_user.name}' Your Details Could not be Found! Contact your Teacher.")
             self.current_user = None
