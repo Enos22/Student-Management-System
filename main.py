@@ -3,7 +3,9 @@ from colorama import Fore, Style, init
 from models.school_admin import SchoolAdmin
 from models.student import StudentDetails
 from models.teacher_admin import TeacherAdmin
+from models.users_login import User
 from utils.storage import load_json
+
 init(autoreset=True)
 
 
@@ -53,7 +55,12 @@ class SchoolCLI:
         name = input("Full name: ").strip()
         email = input("Email: ").strip()
         password = input("Password: ").strip()
-        role = input("Role (student/teacher_admin/school_admin): ").strip()
+        role = input("Role (teacher_admin/school_admin): ").strip().lower()
+
+        if role not in {"teacher_admin", "school_admin"}:
+            print("Only teacher_admin and school_admin can register accounts. Students are added by the school admin.")
+            return
+
         try:
             self.current_user = self.auth.register(name, email, password, role)
             print(f"Registered {self.current_user.name} as {self.current_user.role}.")
@@ -95,12 +102,7 @@ class SchoolCLI:
             self.current_user = None
 
     def student_portal(self):
-        if not self.student_store.students:
-            print("Your Details could not be found! Contact your Teacher")
-            self.current_user = None
-            return
-
-        current_student = self.student_store.view_student(self.current_user.name)
+        current_student = self.student_store.view_student(self.current_user.email) or self.student_store.view_student(self.current_user.name)
         if current_student is None:
             print(f"Dear '{self.current_user.name}' Your Details Could not be Found! Contact your Teacher.")
             self.current_user = None
@@ -160,7 +162,7 @@ class SchoolCLI:
             choice = input(Style.RESET_ALL + "Choose an option: ").strip()
 
             if choice == "1":
-                student_id = input("Enter student ID: ").strip()
+                student_id = input("Enter student ID, name or email: ").strip()
                 print(self.teacher_admin.display_student(student_id))
             elif choice == "2":
                 student_id = input("Student ID: ").strip()
@@ -233,15 +235,18 @@ class SchoolCLI:
                 name = input("Teacher name: ")
                 email = input("Teacher email: ")
                 subject = input("Subject: ")
+                password = input("Teacher password: ")
                 if not self.is_non_empty(name):
                     print("Name cannot be empty.")
                 elif not self.is_valid_email(email):
                     print("This email is not valid.")
                 elif not self.is_non_empty(subject):
                     print("Subject cannot be empty.")
+                elif len(password) < 4:
+                    print("Teacher password must have at least 4 characters.")
                 else:
-                    self.school_admin.add_teacher({"id": teacher_id, "name": name, "email": email, "subject": subject})
-                    print("Teacher added.")
+                    self.school_admin.add_teacher({"id": teacher_id, "name": name, "email": email, "subject": subject, "password": password})
+                    print("Teacher added and login access created.")
             elif choice == "2":
                 teacher_id = self.read_id("Teacher ID to delete: ")
                 deleted = self.school_admin.delete_teacher(teacher_id)
@@ -283,24 +288,18 @@ class SchoolCLI:
                 course_id = self.read_id("Course ID to delete: ")
                 deleted = self.school_admin.delete_course(course_id)
                 print("Deleted." if deleted else "No course found with that ID.")
-            
             elif choice == "7":
-                    print("\n--- Register New Student ---")
-                    name = input("Enter student name: ").strip()
-                    email = input("Enter student email: ").strip()
-                    password = input("Enter student password: ").strip()
-                    role = input("Enter role (student/admin): ").strip()
-
-                    # Hash the password (basic example, you can use hashlib or bcrypt)
-                    import hashlib
-                    password_hash = hashlib.sha256(password.encode()).hexdigest()
-
-                    # Call your method
-                    student = self.school_admin.register_student(name, email, password_hash, role)
-
-                    print(f"Student {student['name']} registered successfully!") 
-               
-
+                print("\n--- Register New Student ---")
+                student_id = self.read_id("Enter student ID: ")
+                name = input("Enter student name: ").strip()
+                email = input("Enter student email: ").strip()
+                password = input("Enter student password: ").strip()
+                if not name or not email or not password:
+                    print("Student name, email and password are required.")
+                    continue
+                password_hash = User.hash_password(password)
+                student = self.school_admin.register_student(name, email, password_hash, "student", student_id=student_id)
+                print(f"Student {student['name']} registered successfully!")
             elif choice == "8":
                 print("Goodbye!")
                 self.current_user = None
