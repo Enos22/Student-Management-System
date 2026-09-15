@@ -150,7 +150,7 @@ class SchoolCLI:
         while True:
             print(Fore.YELLOW + "\n--- Teacher Admin Menu ---")
             print(Fore.BLUE + "1. View student")
-            print(Fore.GREEN + "2. Add student")
+            print(Fore.GREEN + "2. Add student details")
             print(Fore.LIGHTRED_EX + "3. Add unit")
             print(Fore.CYAN + "4. Add grade")
             print(Fore.LIGHTMAGENTA_EX + "5. Update grade")
